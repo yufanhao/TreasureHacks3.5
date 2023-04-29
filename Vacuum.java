@@ -146,4 +146,30 @@ public class Vacuum {
         }
         System.out.println("No solution found.");
     }
+
+    public static void main(String[] args){
+        Scanner scanner = new Scanner(System.in);
+        int startY = 0;
+        int startX = 0;
+        cols = scanner.nextInt();
+        rows = scanner.nextInt();
+        scanner.nextLine();
+        char[][] world = new char[rows][cols];
+        for (int i = 0; i < rows; i++) {
+            String line = scanner.nextLine();
+            for (int j = 0; j < cols; j++) {
+                world[i][j] = line.charAt(j);
+            }
+        }
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                if (world[i][j] == '@') {
+                    startX = j;
+                    startY = i;
+                    world[i][j] = '_';
+                }
+            }
+        }
+        uniformCostSearch(startX, startY, world);
+    }
 }
