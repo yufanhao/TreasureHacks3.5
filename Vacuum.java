@@ -1,16 +1,15 @@
 import java.util.*;
+import java.util.List;
 
 public class Vacuum {
     public static int rows;
     public static int cols;
-
-    private static class Node implements Comparable<Node> {
+    private static class Node implements Comparable<Node>{
         int x;
         int y;
         char[][] world;
         int cost;
         String path;
-
         public Node(int x, int y, char[][] world, int cost, String path) {
             this.x = x;
             this.y = y;
@@ -30,7 +29,6 @@ public class Vacuum {
                 return 0;
             }
         }
-
         private boolean isValidCell(int row, int col) {
             if (row < 0 || col < 0 || row >= rows || col >= cols) {
                 return false;
@@ -40,33 +38,29 @@ public class Vacuum {
             }
             return true;
         }
-
+        // Generate the children of a state by applying the valid actions
         public List<Node> children() {
             List<Node> children = new ArrayList<Node>();
             char[][] newWorld = this.world;
 
             // move up
             if (isValidCell(y-1, x)) {
-                Node newNode = new Node(x, y - 1, newWorld, cost + 1, path + "N\n");
-                children.add(newNode);
+                children.add(new Node(x, y - 1, newWorld, cost + 1, path + "N\n"));
             }
 
             // move down
             if (isValidCell(y+1, x)) {
-                Node newNode = new Node(x, y + 1, newWorld, cost + 1, path + "S\n");
-                children.add(newNode);
+                children.add(new Node(x, y + 1, newWorld, cost + 1, path + "S\n"));
             }
 
             // move left
             if (isValidCell(y, x-1)) {
-                Node newNode = new Node(x - 1 , y, newWorld, cost + 1, path + "W\n");
-                children.add(newNode);
+                children.add(new Node(x - 1, y, newWorld, cost + 1, path + "W\n"));
             }
 
             // move right
             if (isValidCell(y, x+1)) {
-                Node newNode = new Node(x + 1, y, newWorld, cost + 1, path + "E\n");
-                children.add(newNode);
+                children.add(new Node(x + 1, y, newWorld, cost + 1, path + "E\n"));
             }
 
             // vacuum
@@ -75,9 +69,10 @@ public class Vacuum {
                 for(int i = 0; i < rows; i++) {
                     newWorldV[i] = this.world[i].clone();
                 }
-                Node newNode = new Node(x, y, newWorld, cost + 1, path + "V\n");
-                children.add(newNode);
+
+
                 newWorldV[y][x] = '_';
+                children.add(new Node(x, y, newWorldV, cost + 1, path + "V\n"));
             }
             return children;
         }
