@@ -85,5 +85,33 @@ public class Vacuum {
             }
             return children;
         }
+
+        private boolean isClean(char[][] world) {
+            for(int i = 0; i < cols; i++) {
+                for (int j = 0; j < rows; j++) {
+                    if (world[j][i] == '*') {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
     }
+
+    private static int dirt(char[][] world) {
+        int d = 0;
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                if (world[i][j] == '*') {
+                    d++;
+                }
+            }
+        }
+        return d;
+    }
+
+    private static int[] nodeInfo(Node node) {
+        return new int[] {node.x, node.y, dirt(node.world), node.cost};
+    }
+
 }
