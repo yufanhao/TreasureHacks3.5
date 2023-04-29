@@ -27,5 +27,18 @@ public class Vacuum {
                 return 0;
             }
         }
+
+        private boolean isValidCell(int row, int col) {
+            if (row < 0 || col < 0 || row >= rows || col >= cols) {
+                return false;
+            }
+            if (world[row][col] == '#') {
+                return false;
+            }
+            return true;
+        }
+
     }
+
+
 }
