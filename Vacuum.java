@@ -11,11 +11,12 @@ public class Vacuum {
         int cost;
         String path;
 
-        public Node(int x, int y, char[][] world, int cost) {
+        public Node(int x, int y, char[][] world, int cost, String path) {
             this.x = x;
             this.y = y;
             this.world = world;
             this.cost = cost;
+            this.path = path;
         }
 
         public int compareTo(Node n){
@@ -46,29 +47,25 @@ public class Vacuum {
 
             // move up
             if (isValidCell(y-1, x)) {
-                Node newNode = new Node(x, y - 1, newWorld, cost + 1);
-                newNode.path = newNode.path + "N\n";
+                Node newNode = new Node(x, y - 1, newWorld, cost + 1, path + "N\n");
                 children.add(newNode);
             }
 
             // move down
             if (isValidCell(y+1, x)) {
-                Node newNode = new Node(x, y + 1, newWorld, cost + 1);
-                newNode.path = newNode.path + "S\n";
+                Node newNode = new Node(x, y + 1, newWorld, cost + 1, path + "S\n");
                 children.add(newNode);
             }
 
             // move left
             if (isValidCell(y, x-1)) {
-                Node newNode = new Node(x - 1 , y, newWorld, cost + 1);
-                newNode.path = newNode.path + "W\n";
+                Node newNode = new Node(x - 1 , y, newWorld, cost + 1, path + "W\n");
                 children.add(newNode);
             }
 
             // move right
             if (isValidCell(y, x+1)) {
-                Node newNode = new Node(x + 1, y, newWorld, cost + 1);
-                newNode.path = newNode.path + "E\n";
+                Node newNode = new Node(x + 1, y, newWorld, cost + 1, path + "E\n");
                 children.add(newNode);
             }
 
@@ -78,8 +75,7 @@ public class Vacuum {
                 for(int i = 0; i < rows; i++) {
                     newWorldV[i] = this.world[i].clone();
                 }
-                Node newNode = new Node(x, y, newWorld, cost + 1);
-                newNode.path = newNode.path + "V\n";
+                Node newNode = new Node(x, y, newWorld, cost + 1, path + "V\n");
                 children.add(newNode);
                 newWorldV[y][x] = '_';
             }
@@ -114,4 +110,40 @@ public class Vacuum {
         return new int[] {node.x, node.y, dirt(node.world), node.cost};
     }
 
+    public static void uniformCostSearch(int x, int y, char[][] world) {
+        // Create the initial state and the priority queue
+        Node initialState = new Node(x, y, world, 0, "");
+        PriorityQueue<Node> priorityQueue = new PriorityQueue<Node>();
+        priorityQueue.add(initialState);
+
+        // Apply the Uniform Cost Search algorithm
+        ArrayList<int[]> visited = new ArrayList<int[]>();
+        while (!priorityQueue.isEmpty()) {
+            Node currentNode = priorityQueue.poll();
+            boolean visit = false;
+            for (int[] ints : visited) {
+                if (Arrays.equals(ints, nodeInfo(currentNode))) {
+                    visit = true;
+                }
+            }
+            if (visit) {
+                continue;
+            }
+
+            visited.add(nodeInfo(currentNode));
+
+            if (currentNode.isClean(currentNode.world)) {
+                System.out.println(currentNode.path);
+                return;
+            }
+
+
+            for (Node child : currentNode.children()) {
+                if (!visited.contains(nodeInfo(child))) {
+                    priorityQueue.add(child);
+                }
+            }
+        }
+        System.out.println("No solution found.");
+    }
 }
