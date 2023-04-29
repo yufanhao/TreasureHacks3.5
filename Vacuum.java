@@ -1,3 +1,5 @@
+import java.util.*;
+
 public class Vacuum {
     public static int rows;
     public static int cols;
@@ -38,7 +40,50 @@ public class Vacuum {
             return true;
         }
 
+        public List<Node> children() {
+            List<Node> children = new ArrayList<Node>();
+            char[][] newWorld = this.world;
+
+            // move up
+            if (isValidCell(y-1, x)) {
+                Node newNode = new Node(x, y - 1, newWorld, cost + 1);
+                newNode.path = newNode.path + "N\n";
+                children.add(newNode);
+            }
+
+            // move down
+            if (isValidCell(y+1, x)) {
+                Node newNode = new Node(x, y + 1, newWorld, cost + 1);
+                newNode.path = newNode.path + "S\n";
+                children.add(newNode);
+            }
+
+            // move left
+            if (isValidCell(y, x-1)) {
+                Node newNode = new Node(x - 1 , y, newWorld, cost + 1);
+                newNode.path = newNode.path + "W\n";
+                children.add(newNode);
+            }
+
+            // move right
+            if (isValidCell(y, x+1)) {
+                Node newNode = new Node(x + 1, y, newWorld, cost + 1);
+                newNode.path = newNode.path + "E\n";
+                children.add(newNode);
+            }
+
+            // vacuum
+            if (this.world[y][x] == '*') {
+                char[][] newWorldV = new char[rows][cols];
+                for(int i = 0; i < rows; i++) {
+                    newWorldV[i] = this.world[i].clone();
+                }
+                Node newNode = new Node(x, y, newWorld, cost + 1);
+                newNode.path = newNode.path + "V\n";
+                children.add(newNode);
+                newWorldV[y][x] = '_';
+            }
+            return children;
+        }
     }
-
-
 }
