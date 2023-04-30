@@ -1,7 +1,7 @@
 import java.util.*;
 import java.util.List;
 
-public class Vacuum {
+public class SmartClean {
     public static int rows;
     public static int cols;
     private static class Node implements Comparable<Node>{
@@ -69,7 +69,6 @@ public class Vacuum {
                 for(int i = 0; i < rows; i++) {
                     newWorldV[i] = this.world[i].clone();
                 }
-
 
                 newWorldV[y][x] = '_';
                 children.add(new Node(x, y, newWorldV, cost + 1, path + "V\n"));

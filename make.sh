@@ -1,3 +1,3 @@
 #!/bin/sh
 
-javac Vacuum.java
+javac SmartClean.java
